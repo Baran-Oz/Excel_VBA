@@ -2,11 +2,12 @@ Sub PDF()
 '
 ' PDF Macro
 ' This Macro enables you to create PDFs from your worksheets.
-' Simply select the range you want to extract as PDF.
+' Simply select the range you want to exract as PDF.
 '
   Dim SelectedRange As Range
   Dim Answer As VbMsgBoxResult
   Dim orientation
+  On Error GoTo Handle
   Set SelectedRange = Application.InputBox("Please select the Range you want to print!", "Print Selection", , , , , , 8)
     
   ' PDF orientation must be selected (Portrait or Landascape)
@@ -19,14 +20,14 @@ Sub PDF()
     orientation = xlLandscape
   End If
   
-  ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
+  ThisWorkbook.ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
   Application.PrintCommunication = False
   With ActiveSheet.PageSetup
       .PrintTitleRows = ""
       .PrintTitleColumns = ""
   End With
   Application.PrintCommunication = True
-  ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
+  ThisWorkbook.ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
   Application.PrintCommunication = False
   With ActiveSheet.PageSetup
       .LeftHeader = ""
@@ -75,4 +76,7 @@ Sub PDF()
   End With
   Application.PrintCommunication = True
   Selection.PrintOut Copies:=1, Collate:=True
+Handle:
 End Sub
+
+
