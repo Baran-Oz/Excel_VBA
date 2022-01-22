@@ -7,27 +7,32 @@ Sub PDF()
   Dim SelectedRange As Range
   Dim Answer As VbMsgBoxResult
   Dim orientation
+  
   On Error GoTo Handle
   Set SelectedRange = Application.InputBox("Please select the Range you want to print!", "Print Selection", , , , , , 8)
-    
+  
+  Do While WorksheetFunction.And(SelectedRange.Rows.Count = 1, SelectedRange.Columns.Count = 1)
+    MsgBox "Please select a range" & vbNewLine & "Selection of one cell has been detected!", vbCritical, "Error"
+    Set SelectedRange = Application.InputBox("Please select the Range you want to print!", "Print Selection", , , , , , 8)
+  Loop
+   
   ' PDF orientation must be selected (Portrait or Landascape)
   Answer = MsgBox("Should it be Portrait?", vbYesNo, "A4 Orientation")
   
   If Answer = vbYes Then
-    
     orientation = xlPortrait
    ElseIf Answer = vbNo Then
     orientation = xlLandscape
   End If
   
-  ThisWorkbook.ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
+  ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
   Application.PrintCommunication = False
   With ActiveSheet.PageSetup
       .PrintTitleRows = ""
       .PrintTitleColumns = ""
   End With
   Application.PrintCommunication = True
-  ThisWorkbook.ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
+  ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
   Application.PrintCommunication = False
   With ActiveSheet.PageSetup
       .LeftHeader = ""
@@ -77,6 +82,5 @@ Sub PDF()
   Application.PrintCommunication = True
   Selection.PrintOut Copies:=1, Collate:=True
 Handle:
+
 End Sub
-
-
