@@ -1,0 +1,78 @@
+Sub PDF()
+'
+' PDF Macro
+' This Macro enables you to create PDFs from your worksheets.
+' Simply select the range you want to extract as PDF.
+'
+  Dim SelectedRange As Range
+  Dim Answer As VbMsgBoxResult
+  Dim orientation
+  Set SelectedRange = Application.InputBox("Please select the Range you want to print!", "Print Selection", , , , , , 8)
+    
+  ' PDF orientation must be selected (Portrait or Landascape)
+  Answer = MsgBox("Should it be Portrait?", vbYesNo, "A4 Orientation")
+  
+  If Answer = vbYes Then
+    
+    orientation = xlPortrait
+   ElseIf Answer = vbNo Then
+    orientation = xlLandscape
+  End If
+  
+  ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
+  Application.PrintCommunication = False
+  With ActiveSheet.PageSetup
+      .PrintTitleRows = ""
+      .PrintTitleColumns = ""
+  End With
+  Application.PrintCommunication = True
+  ActiveSheet.PageSetup.PrintArea = SelectedRange.Address
+  Application.PrintCommunication = False
+  With ActiveSheet.PageSetup
+      .LeftHeader = ""
+      .CenterHeader = ""
+      .RightHeader = ""
+      .LeftFooter = ""
+      .CenterFooter = ""
+      .RightFooter = ""
+      .LeftMargin = Application.InchesToPoints(0.7)
+      .RightMargin = Application.InchesToPoints(0.7)
+      .TopMargin = Application.InchesToPoints(0.75)
+      .BottomMargin = Application.InchesToPoints(0.75)
+      .HeaderMargin = Application.InchesToPoints(0.3)
+      .FooterMargin = Application.InchesToPoints(0.3)
+      .PrintHeadings = False
+      .PrintGridlines = False
+      .PrintComments = xlPrintNoComments
+      .CenterHorizontally = False
+      .CenterVertically = False
+      .orientation = orientation
+      .Draft = False
+      .PaperSize = xlPaperLetter
+      .FirstPageNumber = xlAutomatic
+      .Order = xlDownThenOver
+      .BlackAndWhite = False
+      .Zoom = False
+      .FitToPagesWide = 1
+      .FitToPagesTall = 1
+      .PrintErrors = xlPrintErrorsDisplayed
+      .OddAndEvenPagesHeaderFooter = False
+      .DifferentFirstPageHeaderFooter = False
+      .ScaleWithDocHeaderFooter = True
+      .AlignMarginsHeaderFooter = True
+      .EvenPage.LeftHeader.Text = ""
+      .EvenPage.CenterHeader.Text = ""
+      .EvenPage.RightHeader.Text = ""
+      .EvenPage.LeftFooter.Text = ""
+      .EvenPage.CenterFooter.Text = ""
+      .EvenPage.RightFooter.Text = ""
+      .FirstPage.LeftHeader.Text = ""
+      .FirstPage.CenterHeader.Text = ""
+      .FirstPage.RightHeader.Text = ""
+      .FirstPage.LeftFooter.Text = ""
+      .FirstPage.CenterFooter.Text = ""
+      .FirstPage.RightFooter.Text = ""
+  End With
+  Application.PrintCommunication = True
+  Selection.PrintOut Copies:=1, Collate:=True
+End Sub
